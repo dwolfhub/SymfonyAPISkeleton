@@ -1,0 +1,3 @@
+auth:
+    resource: AppBundle\Controller\AuthController
+    type: rest
