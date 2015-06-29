@@ -1,3 +1,6 @@
 auth:
-    resource: AppBundle\Controller\AuthController
     type: rest
+    resource: AppBundle\Controller\AuthController
+test:
+    type: rest
+    resource: AppBundle\Controller\TestController
