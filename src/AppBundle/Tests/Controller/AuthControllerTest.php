@@ -3,6 +3,7 @@
 namespace AppBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class AuthControllerTest extends WebTestCase
 {
@@ -15,20 +16,32 @@ class AuthControllerTest extends WebTestCase
     {
         $this->client->request('POST', '/auth');
         $response = $this->client->getResponse();
-        
-        // is json response
-        $this->assertInstanceOf(
-            'Symfony\Component\HttpFoundation\JsonResponse',
-            $response
-        );
 
         // is status code 400
         $this->assertEquals(400, $response->getStatusCode());
 
+        $this->isValidErrorResponse($response);
+    }
+
+    public function testInvalidLoginIsUnauthorizedAndShowsError()
+    {
+        $this->client->request('POST', '/auth', [
+            'username' => 'wrongusername',
+            'password' => 'wrongpassword',
+        ]);
+        $response = $this->client->getResponse();
+
+        $this->assertEquals(400, $response->getStatusCode());
+
+        $this->isValidErrorResponse($response);
+    }
+
+    private function isValidErrorResponse(Response $response)
+    {
         $jsonResponse = json_decode($response->getContent());
 
-        // response contains status and errors
-        $this->assertTrue(isset($jsonResponse->status));
+        $this->assertTrue(isset($jsonResponse->code));
         $this->assertTrue(isset($jsonResponse->errors));
+        $this->assertTrue(isset($jsonResponse->message));
     }
 }
