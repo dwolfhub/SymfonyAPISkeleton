@@ -5,7 +5,8 @@ namespace AppBundle\Util;
 use FOS\RestBundle\Util\Inflector\InflectorInterface;
 
 /**
- * Singular inflector doesn't pluralize anything
+ * Singular inflector actually takes plural value
+ * and makes it singular
  */
 class SingularInflector implements InflectorInterface
 {
